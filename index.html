@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2 เดือนของฟ้าครามกับอ้วง 💕</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Mali:wght@400;600;700&family=Sarabun:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg-gradient: radial-gradient(circle at center, #2e0f21 0%, #15050f 50%, #080206 100%);
+    --envelope-color: #6b1835;
+    --envelope-dark: #400c1e;
+    --flap-color: #7d1c3e;
+    --gold: #d4af37;
+    --pink-glow: rgba(255, 183, 197, 0.4);
+    --paper-bg: #fffcf9;
+    --text-color: #2b161d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: var(--bg-gradient);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Sarabun', 'Mali', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+    padding: 20px;
+  }
+
+  #particles-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+  .main-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    z-index: 10;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  /* DAY COUNTER BANNER */
+  .counter-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 50px;
+    padding: 12px 32px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 183, 197, 0.2);
+    animation: floatBanner 4s ease-in-out infinite;
+  }
+
+  .counter-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffc0cb;
+    margin-bottom: 3px;
+  }
+
+  .counter-value {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+
+  @keyframes floatBanner {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* ENVELOPE WRAPPER */
+  .envelope-wrapper {
+    position: relative;
+    width: 360px;
+    height: 240px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--envelope-dark);
+    border-radius: 8px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.15);
+    transform-style: preserve-3d;
+  }
+
+  .flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 130px;
+    background: var(--flap-color);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s ease;
+    z-index: 4; opacity: 1;
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+  }
+
+  .pocket {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 150px;
+    background: var(--envelope-color);
+    clip-path: polygon(0 100%, 100% 100%, 100% 0, 50% 50%, 0 0);
+    border-radius: 0 0 8px 8px;
+    z-index: 3;
+  }
+
+  .pocket-overlay {
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 70%);
+    border-radius: 0 0 8px 8px;
+    z-index: 3; pointer-events: none;
+  }
+
+  .seal {
+    position: absolute;
+    top: 105px; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px; height: 52px;
+    background: radial-gradient(circle at 35% 35%, #e6a13b, #b87b1e, #825206);
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    z-index: 5;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .seal-inner {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 255, 255, 0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  /* EXPANDING LETTER */
+  .letter {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    width: 320px; height: 200px;
+    background: var(--paper-bg);
+    border-radius: 12px;
+    padding: 30px 25px;
+    box-shadow: 0 0 35px var(--pink-glow), 0 15px 35px rgba(0,0,0,0.5);
+    z-index: 2; opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 1, 1),
+                width 0.35s cubic-bezier(0.4, 0, 1, 1),
+                height 0.35s cubic-bezier(0.4, 0, 1, 1),
+                opacity 0.15s ease;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    border: 1px solid #f2e3e8;
+  }
+
+  .corner-heart { position: absolute; font-size: 14px; color: #e85d75; opacity: 0.8; }
+  .top-left { top: 15px; left: 15px; }
+  .top-right { top: 15px; right: 15px; }
+  .bottom-left { bottom: 15px; left: 15px; }
+  .bottom-right { bottom: 15px; right: 15px; }
+
+  .letter-inner {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .letter-inner::-webkit-scrollbar { display: none; }
+
+  .letter-header { text-align: center; margin-bottom: 12px; }
+  .letter-header h1 {
+    font-family: 'Dancing Script', 'Mali', cursive;
+    font-size: 36px;
+    color: #b81d48;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .letter-header .date {
+    font-size: 11px;
+    color: #a06b7a;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .divider {
+    width: 80px; height: 1.5px;
+    background: linear-gradient(to right, transparent, #e85d75, transparent);
+    margin: 12px auto 18px;
+  }
+
+  .letter-content {
+    font-family: 'Sarabun', serif;
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--text-color);
+  }
+  .letter-content p { margin-bottom: 14px; }
+
+  .cursor {
+    display: inline-block;
+    width: 2px; height: 18px;
+    background-color: #d4af37;
+    margin-left: 2px;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.8);
+    animation: blink 0.8s infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .signature {
+    margin-top: 20px;
+    text-align: right;
+    font-family: 'Dancing Script', 'Mali', cursive;
+    font-size: 26px;
+    color: #b81d48;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  .signature span {
+    display: block;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 10px;
+    color: #a06b7a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* PHOTO GALLERY BUTTON inside letter, appears after typing */
+  .gallery-btn {
+    margin-top: 18px;
+    align-self: center;
+    background: linear-gradient(135deg, #e85d75, #b81d48);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(184, 29, 72, 0.5);
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.2s ease;
+  }
+  .gallery-btn:hover { transform: translateY(-2px) scale(1.03); }
+  .gallery-btn.show { opacity: 1; }
+
+  .hint {
+    color: #ffc0cb;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    animation: pulse 2s infinite;
+    transition: opacity 0.3s ease;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  .envelope-wrapper.open .flap {
+    transform: rotateX(180deg); z-index: 1; opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease 0.05s;
+  }
+  .envelope-wrapper.open .seal { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  .envelope-wrapper.open .letter {
+    opacity: 1; z-index: 100;
+    width: 440px; height: 520px;
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                width 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                height 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                opacity 0.4s ease 0.15s;
+  }
+  .envelope-wrapper.open .letter-inner { opacity: 1; transition: opacity 0.5s ease 0.55s; }
+
+  .main-container:has(.envelope-wrapper.open) .hint {
+    opacity: 0 !important; animation-play-state: paused; pointer-events: none;
+  }
+
+  @media (max-width: 480px) {
+    .envelope-wrapper.open .letter { width: 90vw; height: 75vh; }
+  }
+
+  /* ===== PHOTO GALLERY MODAL ===== */
+  .gallery-overlay {
+    position: fixed; inset: 0;
+    background: rgba(8, 2, 6, 0.92);
+    backdrop-filter: blur(6px);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 16px;
+  }
+  .gallery-overlay.open { display: flex; }
+
+  .gallery-box {
+    max-width: 640px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 18px;
+    padding: 26px 20px;
+  }
+
+  .gallery-title {
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .gallery-sub {
+    text-align: center;
+    color: #ffc0cb;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .polaroid {
+    background: #fffdf8;
+    padding: 10px 10px 14px;
+    border-radius: 6px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+    transform: rotate(var(--tilt, 0deg));
+    transition: transform 0.25s ease;
+  }
+  .polaroid:hover { transform: rotate(0deg) scale(1.03); }
+  .polaroid img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 3px;
+    display: block;
+    background: linear-gradient(135deg, #f2c1cf, #d4af37 150%);
+  }
+  .polaroid figcaption {
+    text-align: center;
+    font-family: 'Mali', cursive;
+    font-size: 13px;
+    color: #6b1835;
+    margin-top: 8px;
+  }
+
+  .gallery-close {
+    display: block;
+    margin: 22px auto 0;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--gold);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .camera-fab {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e85d75, #b81d48);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 8px 20px rgba(184, 29, 72, 0.55);
+    cursor: pointer;
+    z-index: 50;
+    border: none;
+  }
+</style>
+</head>
+<body>
+
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="main-container">
+
+    <div class="counter-card">
+      <div class="counter-title">Together For</div>
+      <div class="counter-value" id="dayCounter">0 Days</div>
+    </div>
+
+    <div class="envelope-wrapper" id="envelopeWrapper" onclick="toggleEnvelope()">
+      <div class="envelope">
+        <div class="flap"></div>
+        <div class="seal"><div class="seal-inner">♥</div></div>
+        <div class="pocket"></div>
+        <div class="pocket-overlay"></div>
+
+        <div class="letter">
+          <span class="corner-heart top-left">♥</span>
+          <span class="corner-heart top-right">♥</span>
+          <span class="corner-heart bottom-left">♥</span>
+          <span class="corner-heart bottom-right">♥</span>
+
+          <div class="letter-inner" id="letterContainer">
+            <div class="letter-header">
+              <h1>2 เดือนกับอ้วง</h1>
+              <div class="date">♡ Two Months Of Us ♡</div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="letter-content" id="typewriterContent"></div>
+
+            <div class="signature" id="signature">
+              ด้วยรักเสมอ,<br>
+              <span>ฟ้าคราม 🤍</span>
+            </div>
+
+            <button class="gallery-btn" id="galleryBtn" onclick="event.stopPropagation(); openGallery();">
+              📸 ดูรูปความทรงจำของเรา
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="hint" id="hintText">แตะซองจดหมายเพื่อเปิด / ปิด</div>
+  </div>
+
+  <!-- Floating camera button also opens gallery -->
+  <button class="camera-fab" onclick="openGallery()" title="ดูรูปความทรงจำ">📷</button>
+
+  <!-- PHOTO GALLERY MODAL -->
+  <div class="gallery-overlay" id="galleryOverlay" onclick="if(event.target===this) closeGallery()">
+    <div class="gallery-box">
+      <div class="gallery-title">Our Memories</div>
+      <div class="gallery-sub">รูปความทรงจำ 2 เดือนของฟ้าครามกับอ้วง (แพนด้า)</div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- ===== แก้ไขรูปที่นี่ =====
+             เปลี่ยน src="IMG_4523.jpg" เป็นชื่อไฟล์รูปของคุณ
+             (วางไฟล์รูปไว้ในโฟลเดอร์เดียวกับไฟล์ index.html นี้เลย ไม่ต้องมีโฟลเดอร์ images/)
+             และแก้ข้อความใน <figcaption> เป็นคำบรรยายที่ต้องการ -->
+        <figure class="polaroid" style="--tilt:-2deg">
+          <img src="IMG_4523.jpg" alt="รูปความทรงจำ 1" onerror="this.style.objectFit='contain'; this.style.opacity=0.35;">
+          <figcaption>💕</figcaption>
+        </figure>
+        <figure class="polaroid" style="--tilt:2deg">
+          <img src="IMG_6235.jpg" alt="รูปความทรงจำ 2" onerror="this.style.objectFit='contain'; this.style.opacity=0.35;">
+          <figcaption>✨</figcaption>
+        </figure>
+        <figure class="polaroid" style="--tilt:1.5deg">
+          <img src="IMG_4944.jpg" alt="รูปความทรงจำ 3" onerror="this.style.objectFit='contain'; this.style.opacity=0.35;">
+          <figcaption>🥰</figcaption>
+        </figure>
+        <figure class="polaroid" style="--tilt:-1.5deg">
+          <img src="IMG_4168.jpg" alt="รูปความทรงจำ 4" onerror="this.style.objectFit='contain'; this.style.opacity=0.35;">
+          <figcaption>🎉</figcaption>
+        </figure>
+      </div>
+
+      <button class="gallery-close" onclick="closeGallery()">ปิด</button>
+    </div>
+  </div>
+
+<script>
+  /* ===== แก้วันเริ่มความสัมพันธ์ที่นี่ (ปี, เดือน-1, วัน) ===== */
+  const startDate = new Date(2026, 6, 12); // 12 ก.ค. 2026
+
+  function updateDayCounter() {
+    const today = new Date();
+    const diffTime = Math.abs(today - startDate);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById('dayCounter').innerText = `${diffDays} Days`;
+  }
+  updateDayCounter();
+
+  /* Floating particles background */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = canvas.height + 20;
+      this.size = Math.random() * 12 + 6;
+      this.speedY = Math.random() * 0.7 + 0.3;
+      this.speedX = (Math.random() - 0.5) * 0.5;
+      this.opacity = Math.random() * 0.6 + 0.2;
+      this.type = Math.random() > 0.4 ? 'heart' : 'sparkle';
+      this.color = Math.random() > 0.5 ? '#ffb7c5' : '#ffd700';
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.02;
+    }
+    update() {
+      this.y -= this.speedY;
+      this.x += this.speedX;
+      this.rotation += this.rotSpeed;
+      if (this.y < -30 || this.x < -20 || this.x > canvas.width + 20) this.reset();
+    }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = this.color;
+      if (this.type === 'heart') {
+        ctx.beginPath();
+        const topCurveHeight = this.size * 0.3;
+        ctx.moveTo(0, topCurveHeight);
+        ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurveHeight);
+        ctx.bezierCurveTo(-this.size / 2, (this.size + topCurveHeight) / 2, 0, this.size, 0, this.size);
+        ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurveHeight) / 2, this.size / 2, topCurveHeight);
+        ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurveHeight);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        for (let i = 0; i < 4; i++) {
+          ctx.lineTo(Math.cos((i * Math.PI) / 2) * this.size, Math.sin((i * Math.PI) / 2) * this.size);
+          ctx.lineTo(Math.cos((i * Math.PI) / 2 + Math.PI / 4) * (this.size / 3), Math.sin((i * Math.PI) / 2 + Math.PI / 4) * (this.size / 3));
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < 40; i++) {
+      const p = new Particle();
+      p.y = Math.random() * canvas.height;
+      particles.push(p);
+    }
+  }
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateParticles);
+  }
+  initParticles();
+  animateParticles();
+
+  /* ===== แก้ข้อความในจดหมายที่นี่ ===== */
+  const paragraphs = [
+    "วันนี้ครบ 2 เดือนแล้วนะที่เราเป็นแฟนกัน 💖 เวลาผ่านไปเร็วมากเลย ✨",
+    "อยากบอกว่าดีใจมากที่ได้เจออ้วง และดีใจที่อ้วงเลือกเค้าเป็นคนพิเศษ 💕",
+    "ตั้งแต่วันแรกจนถึงวันนี้ ทุกความทรงจำล้วนมีความหมายกับเค้ามาก 🥰",
+    "ถึงบางวันเราจะเหนื่อย หรือมีเรื่องให้กังวล แต่เค้าก็ยังอยากอยู่ข้างๆอ้วงเสมอ 🤝💕",
+    "ขอให้เราจับมือกันแน่นๆ ผ่านทุกเรื่องไปด้วยกัน และรักกันมากขึ้นทุกวัน 🌹✨",
+    "ขอบคุณที่เข้ามาเป็นส่วนหนึ่งในชีวิตของเค้านะ 🙈🤍",
+    "รักอ้วงที่สุดเลย 🤍"
+  ];
+
+  let typingActive = false;
+
+  async function startTypewriter() {
+    typingActive = true;
+    const contentDiv = document.getElementById('typewriterContent');
+    const signature = document.getElementById('signature');
+    const galleryBtn = document.getElementById('galleryBtn');
+    contentDiv.innerHTML = '';
+    signature.style.opacity = '0';
+    galleryBtn.classList.remove('show');
+
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+
+    for (let i = 0; i < paragraphs.length; i++) {
+      if (!typingActive) return;
+      const p = document.createElement('p');
+      contentDiv.appendChild(p);
+      p.appendChild(cursor);
+
+      const text = paragraphs[i];
+      for (let charIndex = 0; charIndex < text.length; charIndex++) {
+        if (!typingActive) return;
+        p.insertBefore(document.createTextNode(text[charIndex]), cursor);
+        const container = document.getElementById('letterContainer');
+        container.scrollTop = container.scrollHeight;
+        await new Promise(res => setTimeout(res, 75));
+      }
+      await new Promise(res => setTimeout(res, 400));
+    }
+
+    if (typingActive) {
+      cursor.remove();
+      signature.style.opacity = '1';
+      galleryBtn.classList.add('show');
+    }
+  }
+
+  function toggleEnvelope() {
+    const envelope = document.getElementById('envelopeWrapper');
+    const isOpen = envelope.classList.toggle('open');
+    const hint = document.getElementById('hintText');
+
+    if (isOpen) {
+      hint.style.setProperty('opacity', '0', 'important');
+      hint.style.animationPlayState = 'paused';
+      setTimeout(startTypewriter, 500);
+    } else {
+      hint.style.removeProperty('opacity');
+      hint.style.animationPlayState = 'running';
+      typingActive = false;
+      document.getElementById('typewriterContent').innerHTML = '';
+      document.getElementById('signature').style.opacity = '0';
+      document.getElementById('galleryBtn').classList.remove('show');
+    }
+  }
+
+  function openGallery() { document.getElementById('galleryOverlay').classList.add('open'); }
+  function closeGallery() { document.getElementById('galleryOverlay').classList.remove('open'); }
+</script>
+</body>
+</html>

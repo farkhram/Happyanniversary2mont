@@ -1,0 +1,42 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="Babel" />
+          <option value="decorator" />
+          <option value="docutils" />
+          <option value="ebaysdk" />
+          <option value="feedparser" />
+          <option value="html2text" />
+          <option value="Jinja2" />
+          <option value="Mako" />
+          <option value="MarkupSafe" />
+          <option value="mock" />
+          <option value="num2words" />
+          <option value="ofxparse" />
+          <option value="passlib" />
+          <option value="Pillow" />
+          <option value="pydot" />
+          <option value="pyparsing" />
+          <option value="PyPDF2" />
+          <option value="pyserial" />
+          <option value="python-dateutil" />
+          <option value="pytz" />
+          <option value="pyusb" />
+          <option value="qrcode" />
+          <option value="reportlab" />
+          <option value="requests" />
+          <option value="suds-jurko" />
+          <option value="vatnumber" />
+          <option value="vobject" />
+          <option value="Werkzeug" />
+          <option value="XlsxWriter" />
+          <option value="xlwt" />
+          <option value="xlrd" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
